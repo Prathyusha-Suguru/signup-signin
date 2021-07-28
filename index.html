@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Module-12</title>
+	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+	<div id="app">
+
+	</div>
+	<script type="text/babel">
+		class App extends React.Component {
+			render() {
+				return (
+					<div>
+						<button onClick={this.signUp}>Sign-Up</button>
+						<button onClick={this.signIn}>Sign-In</button>
+					</div>
+				);
+			}
+
+			signUp = () => {
+				ReactDOM.render(<SignUp />, document.getElementById("app"));
+			}
+
+			signIn = () => {
+				ReactDOM.render(<SignIn />, document.getElementById("app"));
+			}
+		}
+
+		class SignIn extends React.Component {
+			constructor(props) {
+				super(props);
+				this.state = {
+					"email" : "",
+					"password" : ""
+				};
+			}
+
+			render() {
+				return (
+					<div>
+						<h1>Sign-In</h1>
+						<form onSubmit={this.handleSubmit}>
+							<label>Email : </label>
+							<input type="email" name="email" id="email" onChange={this.handleChange} />
+							<br />
+							<br />
+							<label>Password : </label>
+							<input type="password" name="password" id="password" onChange={this.handleChange} />
+							<br />
+							<br />
+							<input type="submit" name="Sign-in" value="Sign-In" />
+						</form>
+
+					</div>
+				);
+			}
+
+			handleChange = (event) => {
+				let key = event.target.name;
+				let val = event.target.value;
+				this.setState({[key] : val});
+			}
+
+			handleSubmit = (event) => {
+				event.preventDefault();
+				const email = this.state.email;
+				const password = this.state.password;
+				var temp = JSON.parse(localStorage.getItem(email));
+				if(temp["pwd"] == password){
+					document.querySelector("#app").innerHTML = "<p>Hello " + temp["name"] + "<br>" + "You are currently logged in as " + email + "</p>";
+				}
+			}
+		}
+
+		class SignUp extends React.Component {
+			constructor(props) {
+				super(props);
+				this.state = {
+					"name" : "",
+					"email" : "",
+					"password" : ""
+				};
+			}
+
+			render() {
+				return (
+					<div>
+						<h1>Sign-Up</h1>
+						<form onSubmit={this.handleSubmit}>
+							<label>Name : </label>
+							<input type="text" name="name" id="name" onChange={this.handleChange} />
+							<br />
+							<br />
+							<label>Email : </label>
+							<input type="email" name="email" id="email" onChange={this.handleChange} />
+							<br />
+							<br />
+							<label>Password : </label>
+							<input type="password" name="password" id="password" onChange={this.handleChange} />
+							<br />
+							<br />
+							<input type="submit" name="Sign-up" value="Sign-Up" />
+						</form>
+					</div>
+				);
+			}
+
+			handleChange = (event) => {
+				let key = event.target.name;
+				let val = event.target.value;
+				this.setState({[key] : val});
+			}
+
+			handleSubmit = (event) => {
+				event.preventDefault();
+				const email = this.state.email;
+				const name = this.state.name;
+				const pwd = this.state.password;
+				const obj = {"name" : name, "pwd" : pwd}
+				localStorage.setItem(email, JSON.stringify(obj));
+				document.querySelector("#app").innerHTML = "<p>Hello " + name + "<br>" + "You are currently logged in as " + email + "</p>";
+			}
+
+		}
+
+		ReactDOM.render(<App />, document.getElementById("app"));
+	</script>
+</body>
+</html>
